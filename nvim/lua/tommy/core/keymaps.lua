@@ -1,49 +1,93 @@
+local opts = { noremap = true, silent = true }
+
 vim.g.mapleader = " "
+vim.g.maplocalleader = " "
 
-local keymap = vim.keymap
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "moves lines down in visual selection" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "moves lines up in visual selection" })
 
-keymap.set("n", "<leader>nh", ":nohl<CR>", { desc = "Clear search highlights" })
+vim.keymap.set("n", "J", "mzJ`z")
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "move down in buffer with cursor centered" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "move up in buffer with cursor centered" })
+vim.keymap.set("n", "n", "nzzzv")
+vim.keymap.set("n", "N", "Nzzzv")
 
--- window management
-keymap.set("n", "<leader>w/", "<C-w>v", { desc = "Split window vertically" })
-keymap.set("n", "<leader>w-", "<C-w>s", { desc = "Split window horizontally" })
-keymap.set("n", "<leader>w=", "<C-w>=", { desc = "Make splits equal size" })
-keymap.set("n", "<leader>wx", "<C-w>c", { desc = "Close current split" })
+vim.keymap.set("v", "<", "<gv", opts)
+vim.keymap.set("v", ">", ">gv", opts)
 
--- tab management
-keymap.set("n", "<leader>to", "<cmd>tabnew<CR>", { desc = "Open new tab" })
-keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>", { desc = "Close current tab" })
-keymap.set("n", "<leader>tn", "<cmd>tabn<CR>", { desc = "Go to next tab" })
-keymap.set("n", "<leader>tp", "<cmd>tabp<CR>", { desc = "Go to previous tab" })
+-- the how it be paste
+vim.keymap.set("x", "<leader>p", [["_dP]])
 
--- Diagnostic keymaps
-keymap.set("n", "[d", vim.diagnostic.goto_prev, { desc = "Go to previous [D]iagnostic message" })
-keymap.set("n", "]d", vim.diagnostic.goto_next, { desc = "Go to next [D]iagnostic message" })
-keymap.set("n", "<leader>e", vim.diagnostic.open_float, { desc = "Show diagnostic [E]rror messages" })
-keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
+-- remember yanked
+vim.keymap.set("v", "p", '"_dp', opts)
 
-keymap.set("n", "<leader>u", vim.cmd.UndotreeToggle, { desc = "Toggles undo tree" })
+-- Copies or Yank to system clipboard
+vim.keymap.set("n", "<leader>Y", [["+Y]], opts)
 
-keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Moves highlighted section down" })
-keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Moves highlighted section up" })
+-- leader d delete wont remember as yanked/clipboard when delete pasting
+vim.keymap.set({ "n", "v" }, "<leader>d", [["_d]])
 
-keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Re-centers screen when half page jump down" })
-keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Re-centers screen when half page jump up" })
-keymap.set("n", "n", "nzzzv", { desc = "Keeps search term in the center of the screen" })
-keymap.set("n", "N", "Nzzzv", { desc = "Keeps search term in the center of the screen" })
+-- ctrl c as escape cuz Im lazy to reach up to the esc key
+vim.keymap.set("i", "<C-c>", "<Esc>")
+vim.keymap.set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search hl", silent = true })
+-- format without prettier using the built in
+vim.keymap.set("n", "<leader>f", vim.lsp.buf.format)
 
-keymap.set(
-	"x",
-	"<leader>p",
-	[["_dP]],
-	{ desc = "Keeps yanked word in the clipboard after pasting over a highlighted word" }
-)
+-- Unmaps Q in normal mode
+vim.keymap.set("n", "Q", "<nop>")
 
-keymap.set("n", "<leader>y", '"+y', { desc = "Yanks to the system clipboard" })
-keymap.set("v", "<leader>y", '"+y', { desc = "Yanks to the system clipboard" })
-keymap.set("n", "<leader>Y", '"+y', { desc = "Yanks to the system clipboard" })
+--Stars new tmux session from in here
+vim.keymap.set("n", "<C-f>", "<cmd>silent !tmux neww tmux-sessionizer<CR>")
 
-keymap.set("n", "<leader>d", '"_d', { desc = "Deletes to a void register" })
-keymap.set("v", "<leader>d", '"_d', { desc = "Deletes to a void register" })
+-- prevent x delete from registering when next paste
+vim.keymap.set("n", "x", '"_x', opts)
 
-keymap.set("n", "<leader>fml", "<cmd>CellularAutomaton make_it_rain<CR>")
+-- Replace the word cursor is on globally
+vim.keymap.set("n", "<leader>s", [[:%s/\<<C-r><C-w>\>/<C-r><C-w>/gI<Left><Left><Left>]],
+    { desc = "Replace word cursor is on globally" })
+
+-- Executes shell command from in here making file executable
+vim.keymap.set("n", "<leader>x", "<cmd>!chmod +x %<CR>", { silent = true, desc = "makes file executable" })
+
+-- Hightlight yanking
+vim.api.nvim_create_autocmd("TextYankPost", {
+    desc = "Highlight when yanking (copying) text",
+    group = vim.api.nvim_create_augroup("kickstart-highlight-yank", { clear = true }),
+    callback = function()
+        vim.hl.on_yank()
+    end,
+})
+
+-- tab stuff
+-- vim.keymap.set("n", "<leader>to", "<cmd>tabnew<CR>")   --open new tab
+-- vim.keymap.set("n", "<leader>tx", "<cmd>tabclose<CR>") --close current tab
+-- vim.keymap.set("n", "<leader>tn", "<cmd>tabn<CR>")     --go to next
+-- vim.keymap.set("n", "<leader>tp", "<cmd>tabp<CR>")     --go to pre
+-- vim.keymap.set("n", "<leader>tf", "<cmd>tabnew %<CR>") --open current tab in new tab
+
+--split management
+vim.keymap.set("n", "<leader>w/", "<C-w>v", { desc = "Split window vertically" })
+-- split window vertically
+vim.keymap.set("n", "<leader>w-", "<C-w>s", { desc = "Split window horizontally" })
+-- split window horizontally
+vim.keymap.set("n", "<leader>se", "<C-w>=", { desc = "Make splits equal size" }) -- make split windows equal width & height
+-- close current split window
+vim.keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close current split" })
+
+-- Copy filepath to the clipboard
+vim.keymap.set("n", "<leader>fp", function()
+  local filePath = vim.fn.expand("%:~") -- Gets the file path relative to the home directory
+  vim.fn.setreg("+", filePath) -- Copy the file path to the clipboard register
+  print("File path copied to clipboard: " .. filePath) -- Optional: print message to confirm
+end, { desc = "Copy file path to clipboard" })
+
+-- Toggle LSP diagnostics visibility
+local isLspDiagnosticsVisible = true
+vim.keymap.set("n", "<leader>lx", function()
+    isLspDiagnosticsVisible = not isLspDiagnosticsVisible
+    vim.diagnostic.config({
+        virtual_text = isLspDiagnosticsVisible,
+        underline = isLspDiagnosticsVisible
+    })
+end, { desc = "Toggle LSP diagnostics" })
+
