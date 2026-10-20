@@ -84,9 +84,19 @@
       "src": "https://github.com/hyperb1iss/silkcircuit-nvim",
       "version": "2.0.0 - 3.0.0"
     },
+    "vim-test": {
+      "rev": "f688a3e084779aaaed01ddeba48a0a2164b228ef",
+      "src": "https://github.com/vim-test/vim-test",
+      "version": "3.0.0 - 4.0.0"
+    },
     "vim-tmux-navigator": {
       "rev": "e41c431a0c7b7388ae7ba341f01a0d217eb3a432",
       "src": "https://github.com/christoomey/vim-tmux-navigator"
+    },
+    "vimux": {
+      "rev": "37f41195e6369ac602a08ec61364906600b771f1",
+      "src": "https://github.com/preservim/vimux",
+      "version": "1.0.0 - 2.0.0"
     },
     "which-key.nvim": {
       "rev": "fcbf4eea17cb299c02557d576f0d568878e354a4",
