@@ -50,6 +50,11 @@ local other_tools = {
 	"stylua",
 	"gofumpt",
 	"goimports",
+	-- config.debug (codelldb is picked up by rustaceanvim)
+	"codelldb",
+	"js-debug-adapter",
+	"delve",
+	"debugpy",
 }
 
 vim.pack.add({
