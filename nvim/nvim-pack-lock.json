@@ -1,0 +1,19 @@
+{
+  "plugins": {
+    "mini.nvim": {
+      "rev": "1345d191bb3da9c7b0e977f4387c5761f9bff68d",
+      "src": "https://github.com/nvim-mini/mini.nvim",
+      "version": "0.18.0 - 0.19.0"
+    },
+    "silkcircuit-nvim": {
+      "rev": "3ee8269b311476ffea5772c4d851f5e99198638e",
+      "src": "https://github.com/hyperb1iss/silkcircuit-nvim",
+      "version": "2.0.0 - 3.0.0"
+    },
+    "which-key.nvim": {
+      "rev": "fcbf4eea17cb299c02557d576f0d568878e354a4",
+      "src": "https://github.com/folke/which-key.nvim",
+      "version": "3.0.0 - 4.0.0"
+    }
+  }
+}

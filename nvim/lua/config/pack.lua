@@ -4,6 +4,8 @@
 -- on a fresh clone the very first vim.pack.add() installs every plugin in
 -- nvim-pack-lock.json at once, so all steps must be registered before it.
 
+local M = {}
+
 require("config.health").declare_tool({
 	cmd = "git",
 	needed_by = "vim.pack (installing and updating plugins)",
@@ -14,12 +16,30 @@ require("config.health").declare_tool({
 ---@type table<string, fun(data: vim.event.packchanged.data)>
 local build_steps = {}
 
--- Read by the statusline's update reminder.
 local last_update_path = vim.fs.joinpath(vim.fn.stdpath("state"), "pack-updated")
 
+--- os.time() of the last plugin update on this machine; nil until first read.
+---@type integer?
+local last_update_time
+
 local function record_update_time()
+	last_update_time = os.time()
 	vim.fn.mkdir(vim.fs.dirname(last_update_path), "p")
-	vim.fn.writefile({ tostring(os.time()) }, last_update_path)
+	vim.fn.writefile({ tostring(last_update_time) }, last_update_path)
+end
+
+--- Whole days since plugins were last updated on this machine.
+--- On a machine with no record yet, the count starts now.
+---@return integer
+function M.days_since_last_update()
+	if not last_update_time then
+		local recorded = vim.fn.filereadable(last_update_path) == 1 and vim.fn.readfile(last_update_path)[1]
+		last_update_time = tonumber(recorded)
+		if not last_update_time then
+			record_update_time()
+		end
+	end
+	return math.floor((os.time() - last_update_time) / 86400)
 end
 
 ---@param data vim.event.packchanged.data
@@ -54,3 +74,5 @@ vim.api.nvim_create_autocmd("PackChanged", {
 		end
 	end,
 })
+
+return M

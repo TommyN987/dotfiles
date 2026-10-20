@@ -1,5 +1,3 @@
-require("vim._core.ui2").enable({})
-
 require("config.options")
 require("config.keymaps")
 require("config.filetypes")
@@ -7,3 +5,4 @@ require("config.filetypes")
 require("config.pack")
 
 -- Capability modules (docs/spec.md §3–§12) are added below as they are built.
+require("config.ui")
