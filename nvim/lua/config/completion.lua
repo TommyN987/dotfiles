@@ -11,6 +11,13 @@ require("blink.cmp").setup({
 	keymap = { preset = "default" },
 	sources = {
 		default = { "lsp", "path", "buffer" },
+		per_filetype = {
+			-- Table and column names from the connected database (config.database).
+			sql = { "lsp", "dadbod", "buffer" },
+		},
+		providers = {
+			dadbod = { name = "Dadbod", module = "vim_dadbod_completion.blink" },
+		},
 	},
 	fuzzy = { implementation = "prefer_rust_with_warning" },
 })
