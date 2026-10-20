@@ -1,0 +1,16 @@
+vim.g.mapleader = " "
+vim.g.maplocalleader = " "
+
+vim.keymap.set("x", "p", [["_dP]], { desc = "Paste over selection without losing yanked text" })
+
+vim.keymap.set("n", "<C-c>", ":nohl<CR>", { desc = "Clear search highlighting", silent = true })
+
+vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", { desc = "Move selected lines down" })
+vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", { desc = "Move selected lines up" })
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { desc = "Scroll down half a page, cursor centered" })
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { desc = "Scroll up half a page, cursor centered" })
+vim.keymap.set("n", "n", "nzzzv", { desc = "Next search match, centered and unfolded" })
+vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search match, centered and unfolded" })
+
+vim.keymap.set("v", "<", "<gv", { desc = "Unindent and keep selection" })
+vim.keymap.set("v", ">", ">gv", { desc = "Indent and keep selection" })

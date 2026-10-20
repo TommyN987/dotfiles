@@ -41,9 +41,11 @@ Agreed on 2026-10-20. It builds on [frame.md](frame.md), [research.md](research.
 
 ## 2. Neovim skeleton — MUST
 
+All of the config's Lua modules live under `lua/config/` (changed while coding, 2026-10-20). Top-level names would collide with Lua's built-in modules: `require("debug")` returns Lua's own `debug` library. It also matches `:checkhealth config`, which loads `lua/config/health.lua`.
+
 - **2.1** `init.lua` loads in this order: options → core keymaps → pack hooks → capability modules — MUST.
   - Done: after plugins are installed on a fresh clone, `nvim --headless +qa` exits 0 with no errors.
-- **2.2** Plugin hooks and update tracking (`lua/pack.lua`) — MUST.
+- **2.2** Plugin hooks and update tracking (`lua/config/pack.lua`) — MUST.
   - **2.2.1** All `PackChanged` build steps are registered in one place, before the first `vim.pack.add` — MUST.
     - The pattern is in `:help vim.pack-events`.
     - Done: deleting a plugin's folder and restarting reinstalls it *and* runs its build step.
