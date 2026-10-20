@@ -5,8 +5,10 @@
 local health = require("config.health")
 health.declare_tool({
 	cmd = "rust-analyzer",
-	needed_by = "rustaceanvim (from rustup: `rustup component add rust-analyzer`)",
-	packages = { pacman = "rustup", apt = "rustup" },
+	needed_by = "rustaceanvim",
+	-- rustup puts a rust-analyzer launcher on $PATH even when the component is missing.
+	verify_runs = true,
+	fix = "Install with: rustup component add rust-analyzer",
 })
 health.declare_tool({
 	cmd = "cargo",
@@ -31,7 +33,16 @@ vim.pack.add({
 	{ src = "https://github.com/mrcjkb/rustaceanvim", version = vim.version.range("9.*") },
 })
 
-vim.lsp.enable(require("config.mason").lsp_servers)
+--- Servers installed outside Mason; each has its config in lsp/<server>.lua.
+local external_servers = { "surql" }
+
+health.declare_tool({
+	cmd = "surreal",
+	needed_by = "SurrealQL language server",
+	fix = "Install the surreal CLI (https://surrealdb.com/install) onto $PATH, then: surreal install lsp",
+})
+
+vim.lsp.enable(vim.list_extend(vim.deepcopy(require("config.mason").lsp_servers), external_servers))
 
 -- Signs in the gutter only (spec 4.2.4). <C-w>d opens the message, ]d / [d jump.
 vim.diagnostic.config({
@@ -49,6 +60,13 @@ vim.api.nvim_create_autocmd("LspAttach", {
 		local function map(lhs, rhs, desc)
 			vim.keymap.set("n", lhs, rhs, { buffer = event.buf, desc = desc })
 		end
+		-- fzf-lua jumps straight there when there's only one result.
+		map("gd", function()
+			require("fzf-lua").lsp_definitions()
+		end, "Go to definition")
+		map("gR", function()
+			require("fzf-lua").lsp_references()
+		end, "Find references")
 		map("gD", vim.lsp.buf.declaration, "Go to declaration")
 	end,
 })

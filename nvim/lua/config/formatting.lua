@@ -1,5 +1,12 @@
 -- Formatting: conform.nvim, on save with a toggle (design D15).
--- Formatters come from Mason (config.mason), except rustfmt (rustup).
+-- Formatters come from Mason (config.mason), except rustfmt (rustup) and
+-- surqlfmt (npm; neither Mason nor the surreal CLI has a SurrealQL formatter).
+
+require("config.health").declare_tool({
+	cmd = "surqlfmt",
+	needed_by = "conform (formatting SurrealQL)",
+	fix = "Install with: npm install -g @surrealdb/surql-fmt",
+})
 
 vim.pack.add({
 	{ src = "https://github.com/stevearc/conform.nvim", version = vim.version.range("9.*") },
@@ -27,10 +34,13 @@ require("conform").setup({
 		lua = { "stylua" },
 		sql = { "sqruff" },
 		toml = { "taplo" },
+		surql = { "surqlfmt" },
 	},
 	formatters = {
 		-- Without this, biome also runs in projects that only use prettier.
 		biome = { require_cwd = true },
+		-- Exits 1 with no output when the input doesn't parse, so the buffer is kept.
+		surqlfmt = { command = "surqlfmt", args = { "--stdin" }, stdin = true },
 	},
 	default_format_opts = { lsp_format = "fallback" },
 	format_on_save = function()

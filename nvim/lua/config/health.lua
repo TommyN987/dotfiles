@@ -10,8 +10,11 @@ local M = {}
 ---@field needed_by string What stops working without it.
 ---@field min_version? string Lowest acceptable version, e.g. "0.36".
 ---@field version_args? string[] Arguments that print the version. Default: { "--version" }.
+---@field verify_runs? boolean Run it with version_args and require success. Catches launchers
+---  that exist but can't run the tool, like a rustup proxy for an uninstalled component.
 ---@field when? fun(): boolean Only check the tool when this returns true.
 ---@field packages? { pacman?: string, apt?: string } Package that provides it.
+---@field fix? string Advice shown when it's missing or fails, instead of a package install.
 
 ---@type table<string, config.health.Tool>
 local tools_by_cmd = {}
@@ -48,23 +51,31 @@ local function system_package_manager()
 	end
 end
 
----@param packages? { pacman?: string, apt?: string }
----@return string[] advice
-local function install_advice(packages)
+---@param tool config.health.Tool
+---@return string[]? advice nil when there's nothing to suggest, so no empty ADVICE heading shows
+local function advice_for(tool)
+	if tool.fix then
+		return { tool.fix }
+	end
 	local manager = system_package_manager()
-	local package = manager and packages and packages[manager]
+	local package = manager and tool.packages and tool.packages[manager]
 	if not package then
-		return {}
+		return nil
 	end
 	return { "Install with: " .. install_command_templates[manager]:format(package) }
 end
 
+--- Runs the tool with its version arguments.
 ---@param tool config.health.Tool
----@return vim.Version? version, string? output
-local function installed_version(tool)
+---@return integer exit_code, string message first stdout line, or last stderr line on failure
+local function run_version_command(tool)
 	local result = vim.system({ tool.cmd, unpack(tool.version_args or { "--version" }) }, { text = true }):wait()
-	local output = (result.stdout ~= "" and result.stdout or result.stderr or ""):match("[^\n]*")
-	return vim.version.parse(output, { strict = false }), output
+	local stdout, stderr = result.stdout or "", result.stderr or ""
+	if result.code ~= 0 then
+		local last_stderr_line = vim.trim(stderr):match("([^\n]*)$")
+		return result.code, last_stderr_line ~= "" and last_stderr_line or vim.trim(stdout)
+	end
+	return 0, (stdout ~= "" and stdout or stderr):match("[^\n]*")
 end
 
 ---@param tool config.health.Tool
@@ -72,22 +83,33 @@ local function check_tool(tool)
 	local label = ("%s (needed by: %s)"):format(tool.cmd, tool.needed_by)
 
 	if vim.fn.executable(tool.cmd) == 0 then
-		vim.health.error(label .. ": not found on $PATH", install_advice(tool.packages))
+		vim.health.error(label .. ": not found on $PATH", advice_for(tool))
 		return
 	end
 
-	if not tool.min_version then
+	if not tool.min_version and not tool.verify_runs then
 		vim.health.ok(label)
 		return
 	end
 
-	local version, output = installed_version(tool)
+	local exit_code, message = run_version_command(tool)
+	if exit_code ~= 0 then
+		vim.health.error(("%s: fails to run: %s"):format(label, message), advice_for(tool))
+		return
+	end
+
+	if not tool.min_version then
+		vim.health.ok(("%s: %s"):format(label, message))
+		return
+	end
+
+	local version = vim.version.parse(message, { strict = false })
 	if not version then
-		vim.health.warn(("%s: could not read its version from %q"):format(label, output))
+		vim.health.warn(("%s: could not read its version from %q"):format(label, message))
 	elseif vim.version.lt(version, tool.min_version) then
 		vim.health.error(
 			("%s: version %s is older than the required %s"):format(label, tostring(version), tool.min_version),
-			install_advice(tool.packages)
+			advice_for(tool)
 		)
 	else
 		vim.health.ok(("%s: version %s"):format(label, tostring(version)))

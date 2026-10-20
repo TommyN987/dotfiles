@@ -44,8 +44,10 @@ else
 	vim.go.statusline = default_statusline .. item("git_branch") .. item("macro_recording") .. item("update_reminder")
 end
 
+local group = vim.api.nvim_create_augroup("config.statusline", {})
+
 vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
-	group = vim.api.nvim_create_augroup("config.statusline", {}),
+	group = group,
 	desc = "Show macro recording state in the statusline",
 	callback = function()
 		-- During RecordingLeave reg_recording() still returns the register.
@@ -53,6 +55,13 @@ vim.api.nvim_create_autocmd({ "RecordingEnter", "RecordingLeave" }, {
 			vim.cmd.redrawstatus()
 		end)
 	end,
+})
+
+vim.api.nvim_create_autocmd("User", {
+	group = group,
+	pattern = "GitSignsUpdate",
+	desc = "Show the git branch as soon as gitsigns knows it",
+	command = "redrawstatus",
 })
 
 return M
