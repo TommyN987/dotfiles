@@ -1,4 +1,4 @@
-require("tommy.core")
-require("tommy.lazy")
-require("current-theme")
-require("tommy.terminalpop")
+require("vim._core.ui2").enable({})
+
+require("keymaps")
+require("options")
