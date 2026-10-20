@@ -88,6 +88,7 @@ Leader is `Space`. Press it and wait: which-key lists every group.
 | `<leader>q` database | `qq` toggle UI |
 | `<leader>a` AI | `ab` add file, `as` send selection, `aa` / `ad` accept / reject diff |
 | `<leader>o` toggles | `of` format on save, `oh` inlay hints |
+| `<leader>w` windows | `w/` split vertically, `w-` split horizontally, `wx` close |
 | On its own | `<leader>u` undo tree, `<leader>m` arrow |
 
 **Without leader:**
@@ -106,10 +107,12 @@ Leader is `Space`. Press it and wait: which-key lists every group.
 | Normal | `<C-d>` / `<C-u>` | Half-page scroll, cursor centered |
 | Normal | `n` / `N` | Next / previous match, centered and unfolded |
 | Visual | `<` / `>` | Indent and keep the selection |
+| Normal | `<leader>w/` / `<leader>w-` | Split window vertically / horizontally |
+| Normal | `<leader>wx` | Close window |
 
 ## Interface
 
-`lua/config/ui.lua`, `lua/config/statusline.lua`.
+`lua/config/ui.lua`, `lua/config/statusline.lua`, `lua/config/greeter.lua`.
 
 | Plugin | Status | Why | Keys |
 |---|---|---|---|
@@ -117,6 +120,7 @@ Leader is `Space`. Press it and wait: which-key lists every group.
 | silkcircuit-nvim | core | The colorscheme, variant **neon**. Set in the config, because silkcircuit's own saved choice lives outside the repo | `:SilkCircuit {variant}` to try another for this session |
 | mini.icons (mini.nvim) | core | File icons. Also stands in for nvim-web-devicons | — |
 | which-key.nvim | core | Lists the keys that follow a prefix, so forgotten keymaps can be found | press `<leader>` and wait |
+| mini.starter (mini.nvim) | experimental | Greeter when Neovim starts without a file: logo, recent files in the current directory, common actions, plugin count | type the start of an item in lowercase (`fi` → Files), or `j` / `k` and `<CR>` |
 
 **Statusline:** Neovim's default (file, diagnostics counts, LSP progress, position), plus:
 - the git branch (from gitsigns);

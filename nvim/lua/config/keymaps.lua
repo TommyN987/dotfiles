@@ -14,3 +14,7 @@ vim.keymap.set("n", "N", "Nzzzv", { desc = "Previous search match, centered and 
 
 vim.keymap.set("v", "<", "<gv", { desc = "Unindent and keep selection" })
 vim.keymap.set("v", ">", ">gv", { desc = "Indent and keep selection" })
+
+vim.keymap.set("n", "<leader>w/", "<C-w>v", { desc = "Split window vertically" })
+vim.keymap.set("n", "<leader>w-", "<C-w>s", { desc = "Split window horizontally" })
+vim.keymap.set("n", "<leader>wx", "<cmd>close<CR>", { desc = "Close window" })

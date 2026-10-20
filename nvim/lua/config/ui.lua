@@ -12,7 +12,7 @@ vim.pack.add({
 
 -- An explicit variant wins over the one silkcircuit saves in stdpath("data"),
 -- so a fresh clone starts in neon too.
-require("silkcircuit").setup({ variant = "neon" })
+require("silkcircuit").setup({ variant = "vibrant" })
 vim.cmd.colorscheme("silkcircuit")
 
 require("mini.icons").setup()
@@ -32,5 +32,6 @@ require("which-key").setup({
 		{ "<leader>q", group = "database" },
 		{ "<leader>a", group = "AI" },
 		{ "<leader>o", group = "toggles" },
+		{ "<leader>w", group = "windows" },
 	},
 })
