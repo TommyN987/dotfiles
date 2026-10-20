@@ -58,6 +58,12 @@ require("codediff").setup({
 			discard_hunk = "<leader>gr",
 		},
 	},
+	highlights = {
+		-- Word-level tints from config.ui. Otherwise codediff brightens the line
+		-- colour 1.4×, which undoes the readable dark tint.
+		char_insert = "DiffTextAdd",
+		char_delete = "DiffTextDelete",
+	},
 })
 
 vim.keymap.set("n", "<leader>gc", "<cmd>CodeDiff<CR>", { desc = "Review changes (codediff)" })

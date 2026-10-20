@@ -122,6 +122,13 @@ Leader is `Space`. Press it and wait: which-key lists every group.
 | which-key.nvim | core | Lists the keys that follow a prefix, so forgotten keymaps can be found | press `<leader>` and wait |
 | mini.starter (mini.nvim) | experimental | Greeter when Neovim starts without a file: logo, recent files in the current directory, common actions, plugin count | type the start of an item in lowercase (`fi` → Files), or `j` / `k` and `<CR>` |
 
+**Diff colours:** silkcircuit's diff backgrounds are full-strength neon, which made syntax colours unreadable. `ui.lua` replaces them with dark tints of the palette, used in codediff and native diff mode (`<leader>gd`):
+- Added lines: cyan at 8%; added words: cyan at 16%.
+- Deleted lines: magenta at 12%; deleted words: magenta at 22%.
+- Changed lines: blue at 10%; changed words: blue at 18%.
+
+Every syntax colour keeps a contrast of 4.1 or more on them.
+
 **Statusline:** Neovim's default (file, diagnostics counts, LSP progress, position), plus:
 - the git branch (from gitsigns);
 - `recording @x` while recording a macro (`cmdheight=0` hides Neovim's own message);
