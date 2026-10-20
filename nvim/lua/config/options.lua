@@ -25,6 +25,22 @@ vim.opt.swapfile = false
 vim.opt.backup = false
 vim.opt.undofile = true
 
+-- Words added with `zg` go into this repo, so the dictionary travels between machines.
+-- `zg` fails (E484) if the folder doesn't exist yet.
+local spell_dir = vim.fn.stdpath("config") .. "/spell"
+vim.fn.mkdir(spell_dir, "p")
+local word_list = spell_dir .. "/en.utf-8.add"
+vim.opt.spellfile = word_list
+
+-- Only the word list is committed (.gitignore): the compiled .spl would conflict
+-- when both machines add words. Neovim doesn't rebuild it by itself, so rebuild
+-- it when it's missing or older than the word list (e.g. after a pull).
+local word_list_stat = vim.uv.fs_stat(word_list)
+local compiled_stat = vim.uv.fs_stat(word_list .. ".spl")
+if word_list_stat and (not compiled_stat or compiled_stat.mtime.sec < word_list_stat.mtime.sec) then
+	vim.cmd("silent mkspell! " .. vim.fn.fnameescape(word_list))
+end
+
 vim.opt.clipboard:append("unnamedplus")
 vim.opt.isfname:append("@-@")
 vim.opt.hlsearch = true
