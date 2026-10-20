@@ -11,7 +11,7 @@ vim.pack.add({
 })
 
 -- An explicit variant wins over the one silkcircuit saves in stdpath("data"),
--- so a fresh clone starts in neon too.
+-- so a fresh clone starts in vibrant too.
 require("silkcircuit").setup({ variant = "vibrant" })
 vim.cmd.colorscheme("silkcircuit")
 

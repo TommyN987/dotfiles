@@ -117,7 +117,7 @@ Leader is `Space`. Press it and wait: which-key lists every group.
 | Plugin | Status | Why | Keys |
 |---|---|---|---|
 | ui2 (built in) | core | Messages and command line without "Press ENTER", with `cmdheight=0` | — |
-| silkcircuit-nvim | core | The colorscheme, variant **neon**. Set in the config, because silkcircuit's own saved choice lives outside the repo | `:SilkCircuit {variant}` to try another for this session |
+| silkcircuit-nvim | core | The colorscheme, variant **vibrant**. Set in the config, because silkcircuit's own saved choice lives outside the repo | `:SilkCircuit {variant}` to try another for this session |
 | mini.icons (mini.nvim) | core | File icons. Also stands in for nvim-web-devicons | — |
 | which-key.nvim | core | Lists the keys that follow a prefix, so forgotten keymaps can be found | press `<leader>` and wait |
 | mini.starter (mini.nvim) | experimental | Greeter when Neovim starts without a file: logo, recent files in the current directory, common actions, plugin count | type the start of an item in lowercase (`fi` → Files), or `j` / `k` and `<CR>` |
