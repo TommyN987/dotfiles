@@ -14,7 +14,12 @@ require("config.health").declare_tool({
 
 --- Plugin name -> step to run after that plugin is installed or updated.
 ---@type table<string, fun(data: vim.event.packchanged.data)>
-local build_steps = {}
+local build_steps = {
+	-- Parsers must match the plugin version after every update.
+	["nvim-treesitter"] = function()
+		vim.cmd("TSUpdate")
+	end,
+}
 
 local last_update_path = vim.fs.joinpath(vim.fn.stdpath("state"), "pack-updated")
 

@@ -134,7 +134,7 @@ These go in the README and in the health check:
     - Servers: tsc, tailwindcss, cssls, html, emmet_language_server, eslint, biome, gopls, basedpyright, ruff, graphql, postgres_lsp, sqruff, taplo, yamlls, marksman, lua_ls, surql.
     - rust-analyzer comes from rustup through rustaceanvim, not lspconfig.
     - Done: in a `.tsx` file, `:lsp` lists `tsc` and `tailwindcss`, plus eslint or biome where the project has a config for them. It never lists lspconfig's `rust_analyzer`.
-  - **4.2.3** Per-server overrides in `lsp/` — MUST.
+  - **4.2.3** Per-server overrides — MUST. Overrides of lspconfig's configs go in `after/lsp/`, which is what overrides a plugin's `lsp/*.lua` (`:help lsp-config`). Servers lspconfig doesn't have go in `lsp/`.
     - **4.2.3.1** `lua_ls` gets the Neovim runtime as a library.
       - Done: `vim.` completes in config files.
     - **4.2.3.2** `surql` is a hand-written config with `cmd = { 'surreal-lsp' }` (or `surreal lsp stdio`) and `filetypes = { 'surql' }`.
@@ -174,7 +174,7 @@ These go in the README and in the health check:
   - **4.4.2** Format on save, with a toggle — MUST.
     - Done: after toggling it off, saving leaves the file unchanged.
 - **4.5** Linting comes only from language servers. rustaceanvim runs clippy — MUST.
-  - Done: an unused `mut` in a `.rs` file shows a clippy warning.
+  - Done: `if v.len() == 0` in a `.rs` file shows a clippy `len_zero` warning. An unused `mut` would be a rustc warning, so it wouldn't prove clippy runs.
 
 ## 5. Navigation — MUST
 

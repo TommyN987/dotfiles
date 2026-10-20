@@ -6,3 +6,9 @@ require("config.pack")
 
 -- Capability modules (docs/spec.md §3–§12) are added below as they are built.
 require("config.ui")
+-- Before anything that runs a Mason-installed tool.
+require("config.mason")
+require("config.treesitter")
+require("config.lsp")
+require("config.completion")
+require("config.formatting")
