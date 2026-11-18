@@ -6,6 +6,11 @@ require("config.health").declare_tool({
 	needed_by = "vimux (runs tests in a tmux pane; Neovim must itself run inside tmux)",
 	packages = { pacman = "tmux", apt = "tmux" },
 })
+require("config.health").declare_tool({
+	cmd = "cargo-nextest",
+	needed_by = "vim-test (Rust tests run with `cargo nextest run`)",
+	fix = "Install with: cargo install cargo-nextest --locked",
+})
 
 -- Read when a test command runs, so the order relative to vim.pack.add() doesn't matter.
 vim.g["test#strategy"] = "vimux"

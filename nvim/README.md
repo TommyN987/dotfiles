@@ -14,6 +14,8 @@ Neovim 0.12+, plugins managed by the built-in `vim.pack`. The background is in [
 
 All plugins were added on 2026-10-20.
 
+**Keymap cheat sheet:** [cheatsheet.md](cheatsheet.md), the most-used keys on one A4 page.
+
 ## Contents
 
 - [Setup on a new machine](#setup-on-a-new-machine)
@@ -36,7 +38,7 @@ All plugins were added on 2026-10-20.
    - `tmux`
    - `psql` (pacman: `postgresql`, apt: `postgresql-client`), `sqlite3`
    - **WSL only:** `wl-clipboard`. Without it, yanks never reach the Windows clipboard.
-3. **Rust toolchain:** `rustup component add rust-analyzer` (rustfmt and clippy come with rustup).
+3. **Rust toolchain:** `rustup component add rust-analyzer` (rustfmt and clippy come with rustup), plus `cargo install cargo-nextest --locked` for running tests.
 4. **SurrealQL:**
    - The `surreal` CLI on `$PATH`, then `surreal install lsp`.
    - The formatter: `npm install -g @surrealdb/surql-fmt`.
